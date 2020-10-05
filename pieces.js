@@ -65,21 +65,46 @@ function piece(_player, _typ, _c, _r) {
     var options = [];
 
     //Fill options array with all possible squares that piecean move
+
     if (this.type == "pawn") {
       var index = 0;
-      if (this.player == "white") {
-        options[index] = new option(this.parentSquare.c, this.parentSquare.r - 1);
-        index++;
-        if (this.parentSquare.r == 6) {
-          options[index] = new option(this.parentSquare.c, this.parentSquare.r - 2);
-          index++;
-        }
 
-        var targetIndex1 = ((this.parentSquare.r - 1) * 8) + this.parentSquare.c + 1;
-        if (board.squares[targetIndex1].occupied) {
-          options[index] = new option(this.parentSquare.c + 1, this.parentSquare.r - 1);
-          index++;
-        }
+      //Set direction in which pawn should move
+      if (this.player == "white") {
+        var dir = 1;
+      } else {
+        var dir = -1;
+      }
+
+
+      var checkedSquare = board.squares[((this.parentSquare.r - dir) * 8) + this.parentSquare.c];
+
+      if (checkedSquare && checkedSquare.occupied) {
+      } else {
+        options[index] = new option(this.parentSquare.c, this.parentSquare.r - dir);
+        index++;
+      }
+
+      if (this.player == "white" && this.parentSquare.r == 6) {
+        options[index] = new option(this.parentSquare.c, this.parentSquare.r - (2 * dir));
+        index++;
+      }
+
+      if (this.player == "black" && this.parentSquare.r == 1) {
+        options[index] = new option(this.parentSquare.c, this.parentSquare.r - (2 * dir));
+        index++;
+      }
+
+      //Check if the diagonal square is occupied
+      var targetIndexL = ((this.parentSquare.r - dir) * 8) + this.parentSquare.c + 1;
+      if (board.squares[targetIndexL].occupied) {
+        options[index] = new option(this.parentSquare.c + 1, this.parentSquare.r - dir);
+        index++;
+      }
+      var targetIndexR = ((this.parentSquare.r - dir) * 8) + this.parentSquare.c - 1;
+      if (board.squares[targetIndexR].occupied) {
+        options[index] = new option(this.parentSquare.c - 1, this.parentSquare.r - dir);
+        index++;
       }
     }
 
@@ -99,6 +124,58 @@ function piece(_player, _typ, _c, _r) {
       var dirs = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
 
       for (var i = 0; i < 4; i++) {
+        for (var j = 1; j < 8; j++) {
+          //Test if examined square is occupied
+
+          var check = [this.parentSquare.c + (j * dirs[i][0]), this.parentSquare.r + (j * dirs[i][1])];
+
+          var checkedSquare = board.squares[(check[1] * 8) + check[0]];
+
+          if (checkedSquare && checkedSquare.occupied == this.player) {
+            break;
+          } else if (checkedSquare && checkedSquare.occupied) {
+            options[index] = new option(check[0], check[1]);
+            index++;
+            break;
+          } else {
+            options[index] = new option(check[0], check[1]);
+            index++;
+          }
+        }
+      }
+    }
+
+    if (this.type == "rook") {
+      var index = 0;
+      var dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
+
+      for (var i = 0; i < 4; i++) {
+        for (var j = 1; j < 8; j++) {
+          //Test if examined square is occupied
+
+          var check = [this.parentSquare.c + (j * dirs[i][0]), this.parentSquare.r + (j * dirs[i][1])];
+
+          var checkedSquare = board.squares[(check[1] * 8) + check[0]];
+
+          if (checkedSquare && checkedSquare.occupied == this.player) {
+            break;
+          } else if (checkedSquare && checkedSquare.occupied) {
+            options[index] = new option(check[0], check[1]);
+            index++;
+            break;
+          } else {
+            options[index] = new option(check[0], check[1]);
+            index++;
+          }
+        }
+      }
+    }
+
+    if (this.type == "queen") {
+      var index = 0;
+      var dirs = [[1, 1], [1, -1], [-1, -1], [-1, 1], [1, 0], [0, -1], [-1, 0], [0, 1]];
+
+      for (var i = 0; i < 8; i++) {
         for (var j = 1; j < 8; j++) {
           //Test if examined square is occupied
 

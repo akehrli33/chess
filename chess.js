@@ -6,6 +6,7 @@ var game;
 var board;
 var pieces = [];
 
+
 var icons = [];
 
 var version = "offline";
