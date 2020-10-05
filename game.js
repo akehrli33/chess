@@ -13,7 +13,7 @@ function game() {
     pieces[6] = new piece("white", "pawn", 6, 6);
     pieces[7] = new piece("white", "pawn", 7, 6);
 
-    pieces[8] = new piece("black", "pawn", 0, 1);
+    pieces[8] = new piece("black", "pawn", 0, 3);
     pieces[9] = new piece("black", "pawn", 1, 1);
     pieces[10] = new piece("black", "pawn", 2, 1);
     pieces[11] = new piece("black", "pawn", 3, 1);
