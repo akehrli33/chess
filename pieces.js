@@ -64,6 +64,7 @@ function piece(_player, _typ, _c, _r) {
     
     var options = [];
 
+    //Fill options array with all possible squares that piecean move
     if (this.type == "pawn") {
       var index = 0;
       if (this.player == "white") {
@@ -95,13 +96,31 @@ function piece(_player, _typ, _c, _r) {
 
     if (this.type == "bishop") {
       var index = 0;
-      for (var i = 0; i < 1; i++) {
-        for (var j = 0; j < 8; j++) {
-          options[index] = new option(this.parentSquare.c + j, this.parentSquare.r - j);
-          index++;
+      var dirs = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+
+      for (var i = 0; i < 4; i++) {
+        for (var j = 1; j < 8; j++) {
+          //Test if examined square is occupied
+
+          var check = [this.parentSquare.c + (j * dirs[i][0]), this.parentSquare.r + (j * dirs[i][1])];
+
+          var checkedSquare = board.squares[(check[1] * 8) + check[0]];
+
+          if (checkedSquare && checkedSquare.occupied == this.player) {
+            break;
+          } else if (checkedSquare && checkedSquare.occupied) {
+            options[index] = new option(check[0], check[1]);
+            index++;
+            break;
+          } else {
+            options[index] = new option(check[0], check[1]);
+            index++;
+          }
         }
       }
     }
+
+    //Render the option if it is on eligible square
 
     for (var i = 0; i < options.length; i++) {
       if (options[i].c > -1 &&
